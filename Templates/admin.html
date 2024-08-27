@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+</head>
+<body>
+    <h1>Admin Page</h1>
+
+    <!-- Section to view attendance records -->
+    <h2>View Attendance Records</h2>
+    <form action="{{ url_for('admin') }}" method="POST">
+        <label for="user_id">User ID:</label>
+        <input type="text" id="user_id" name="user_id">
+        
+        <button type="submit" name="view">View Records</button>
+    </form>
+
+    <!-- Section to view and update a specific attendance record -->
+    {% if attendance_record %}
+    <h2>Update Attendance Record for {{ attendance_record.user_id }}</h2>
+    <form action="{{ url_for('admin') }}" method="POST">
+        <input type="hidden" name="user_id" value="{{ attendance_record.user_id }}">
+        
+        <label for="total_availed_sick_leaves">Total Availed Sick Leaves:</label>
+        <input type="number" id="total_availed_sick_leaves" name="total_availed_sick_leaves" value="{{ attendance_record.total_availed_sick_leaves }}" required><br>
+
+        <label for="total_availed_annual_leaves">Total Availed Annual Leaves:</label>
+        <input type="number" id="total_availed_annual_leaves" name="total_availed_annual_leaves" value="{{ attendance_record.total_availed_annual_leaves }}" required><br>
+
+        <label for="total_availed_wfh">Total Availed Work from Home:</label>
+        <input type="number" id="total_availed_wfh" name="total_availed_wfh" value="{{ attendance_record.total_availed_wfh }}" required><br>
+
+        <button type="submit" name="update_attendance">Update Attendance</button>
+    </form>
+    {% endif %}
+
+    <!-- Section displaying all attendance records -->
+    <h2>All Attendance Records</h2>
+    <ul>
+        {% for record in attendance_records %}
+            <li>User ID: {{ record.user_id }} | Sick Leaves: {{ record.total_availed_sick_leaves }} | Annual Leaves: {{ record.total_availed_annual_leaves }} | WFH: {{ record.total_availed_wfh }}</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Link to go back to the admin dashboard -->
+    <a href="{{ url_for('admin') }}">Back to Admin Dashboard</a>
+
+    <!-- Link to go back to the main chat interface -->
+    <a href="{{ url_for('index') }}">Back to Chat</a>
+</body>
+</html>
