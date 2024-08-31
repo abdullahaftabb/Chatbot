@@ -66,6 +66,15 @@ def signup():
         # If username does not exist, proceed to create a new user
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
         mongo.db.users.insert_one({'username': username, 'password': hashed_password})
+        
+        # Also create an entry in the attendance collection
+        mongo.db.attendance.insert_one({
+            'user_id': username,
+            'total_availed_sick_leaves': 0,
+            'total_availed_annual_leaves': 0,
+            'total_availed_wfh': 0
+        })
+        
         flash('Signup successful! Please log in.')
         return redirect(url_for('home'))
     return render_template('signup.html')
