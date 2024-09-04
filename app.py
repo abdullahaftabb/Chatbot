@@ -30,6 +30,34 @@ mongo = PyMongo(app)
 def home():
     return render_template('login.html')
 
+@app.route('/change-role', methods=['GET'])
+def change_role():
+    email = request.args.get('email')
+    
+    if not email:
+        return jsonify({'error': 'Email parameter is missing'}), 400
+
+    # Define role mapping based on email
+    role_mapping = {
+        'haseeb@gmail.com': True
+    }
+
+    new_role = role_mapping.get(email)
+    
+    if new_role is None:
+        return jsonify({'error': 'No role defined for this email'}), 404
+
+    # Update the user's role
+    result = mongo.db.users.update_one(
+        {'username': email},
+        {'$set': {'is_admin': new_role}}
+    )
+
+    if result.matched_count == 0:
+        return jsonify({'error': 'User not found'}), 404
+
+    return jsonify({'message': 'User role updated to admin successfully'})
+
 @app.route('/login', methods=['POST'])
 def login():
     username = request.form['username']
