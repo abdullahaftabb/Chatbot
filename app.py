@@ -152,8 +152,8 @@ def reset_password(token):
     return render_template('reset_password.html', token=token)
 
 # Directly set environment variables
-os.environ['GROQ_API_KEY'] = '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'
-os.environ['GOOGLE_API_KEY'] = 'AIzaSyAke4hturZTQtCvS0SLA00t0rD5MJifhW4'
+os.environ['GROQ_API_KEY'] = ''
+os.environ['GOOGLE_API_KEY'] = ''
 
 # Access the keys
 groq_api_key = os.getenv("GROQ_API_KEY")
